@@ -1,6 +1,6 @@
 const express = require("express");
 const router = express.Router();
-const Car = require("../models/Car");
+const Car = require("../../models/Car");
 //for testing purposes
 // GET /api/cars - Get all cars
 router.get("/", async (req, res) => {
@@ -55,7 +55,7 @@ router.put("/:id", async (req, res) => {
       color,
       description,
     });
-    res.json({ message: "Car updated successfully" });
+    res.json({ message: "Car updated successfully", car: car });
   } catch (error) {
     console.log("Error on updating car : ", error);
     res.status(500).json({ message: "SERVER ERROR" });

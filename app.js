@@ -1,26 +1,31 @@
+require("./src/db/mongoose");
 const express = require("express");
+const path = require("path");
 const app = express();
-const mongoose = require("mongoose");
-const PORT = 3000 || process.env.PORT;
-
-// Middleware
-app.use(express.json()); // Parse JSON bodies
-
-// Connect to MongoDB
-const url = "mongodb://localhost:27017/drivehub";
-
-mongoose
-  .connect(url, {})
-  .then((result) => console.log("Database Connected"))
-  .catch((err) => console.log(err));
+const PORT = process.env.PORT;
 
 // Routes
-const authRoutes = require("./routes/auth");
-const carsRoutes = require("./routes/cars");
+const authRoutes = require("./src/routes/auth/auth");
+const signRoute = require("./src/routes/auth/sign");
+const carsRoutes = require("./src/routes/main/cars");
 
+// Set up EJS as the view engine
+app.set("views", path.join(__dirname, "./src/views"));
+app.set("view engine", "ejs");
+
+// Middleware
+app.use(express.json()); // Parse POST requeests with JSON data in body
+app.use(express.urlencoded({ extended: true })); // to parse URL-encoded bodies (for form submissions)
+
+// Serve static files from the public directory
+app.use(express.static(path.join(__dirname, "public")));
+
+// Routes
 app.use("/api/auth", authRoutes);
 app.use("/api/cars", carsRoutes);
+app.use("/", signRoute);
 
+// Error handling middleware
 app.use((err, req, res, next) => {
   console.error(err.stack);
   res.status(500).send("Server Error");

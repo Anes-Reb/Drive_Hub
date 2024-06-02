@@ -18,16 +18,16 @@ const carSchema = new Schema({
     type: Number,
     required: true,
   },
-  mileAge: {
-    type: Number,
-    required: true,
-  },
   color: {
     type: String,
     required: true,
   },
   description: {
     type: String,
+    required: true,
+  },
+  availability: {
+    type: Boolean,
     required: true,
   },
 });

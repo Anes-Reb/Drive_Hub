@@ -1,6 +1,7 @@
 const express = require("express");
 const router = express.Router();
 const Car = require("../../models/Car");
+const { authAdmin, authJwt } = require("../../../middleware");
 //for testing purposes
 // GET /api/cars - Get all cars
 router.get("/", async (req, res) => {
@@ -14,7 +15,7 @@ router.get("/", async (req, res) => {
 });
 
 // GET /api/cars/:id - Get details of a specific car by ID
-router.get("/:id", async (req, res) => {
+router.get("/:id", authJwt, async (req, res) => {
   try {
     // Extract the car ID from the request parameters
     const { id } = req.params;
@@ -30,10 +31,10 @@ router.get("/:id", async (req, res) => {
 });
 
 // POST /api/cars - Add a new car listing
-router.post("/", async (req, res) => {
-  const { make, model, year, price, mileAge, color, description } = req.body;
+router.post("/add", authJwt, authAdmin, async (req, res) => {
+  const { make, model, year, price, color, description } = req.body;
   try {
-    const car = new Car({ make, model, year, price, mileAge, color, description });
+    const car = new Car({ make, model, year, price, color, description });
     await car.save();
     res.json({ message: "Car added successfully" });
   } catch (error) {
@@ -43,15 +44,14 @@ router.post("/", async (req, res) => {
 });
 
 // PUT /api/cars/:id - Update details of a specific car by ID
-router.put("/:id", async (req, res) => {
-  const { make, model, year, price, mileAge, color, description } = req.body;
+router.put("/:id", authJwt, authAdmin, async (req, res) => {
+  const { make, model, year, price, color, description } = req.body;
   try {
     const car = await Car.findByIdAndUpdate(req.params.id, {
       make,
       model,
       year,
       price,
-      mileAge,
       color,
       description,
     });
@@ -63,7 +63,7 @@ router.put("/:id", async (req, res) => {
 });
 
 // DELETE /api/cars/:id - Delete a specific car listing by ID
-router.delete("/:id", (req, res) => {
+router.delete("/:id", authJwt, authAdmin, (req, res) => {
   try {
     Car.findByIdAndDelete(req.params.id);
     res.json({ message: "Car deleted successfully" });

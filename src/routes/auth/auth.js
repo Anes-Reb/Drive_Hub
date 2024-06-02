@@ -1,7 +1,7 @@
-const express = require("express");
 const router = require("express").Router();
 const User = require("../../models/User");
 const { body, validationResult } = require("express-validator");
+const jwt = require("jsonwebtoken");
 
 // POST /api/auth/login - User login
 router.post("/login", [body("email").isEmail(), body("password").notEmpty()], async (req, res) => {
@@ -21,9 +21,16 @@ router.post("/login", [body("email").isEmail(), body("password").notEmpty()], as
     if (!isMatch) {
       return res.status(500).json({ message: "invalid credentials" });
     }
-    //res.json({ message: "user logged in successfully" });
-    //res.json({token:""}) <--- for jwt token(more secure and manage protecting routes)
+
+    // generate token
+    const token = jwt.sign({ id: user._id, role: user.role }, process.env.JWT_SECRET);
+
+    // set token in cookie
+    res.cookie("jwt", token, { httpOnly: true });
     res.redirect("/api/cars");
+    //res.json({ message: "user logged in successfully" });
+    //res.json({ message: "Login successful", redirectTo: "/api/cars", token: token });
+    //res.json({ token, redirect: "/api/cars" }); //used for jwt token(more secure and manage protecting routes)
   } catch (error) {
     console.log("error logging in user : ", error);
     res.status(500).json({ message: "SERVER ERROR" });
@@ -45,11 +52,11 @@ router.post("/register", [body("username").notEmpty(), body("email").isEmail(), 
     if (user) {
       return res.status(400).json({ message: "email address already in use" });
     }
-    user = new User({ username, email, password });
+    user = new User({ username, email, password, role });
     //waiting for user to be saved
     await user.save();
     //res.json({ message: "User registered successfully" });
-    res.redirect("/signin");
+    res.redirect("/auth");
   } catch (error) {
     console.log("Error on registration : ", error);
     res.status(500).json({ message: "SERVER ERROR" });

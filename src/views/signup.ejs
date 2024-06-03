@@ -1,28 +1,105 @@
 <!-- views/signup.ejs -->
+
 <!DOCTYPE html>
 <html lang="en">
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>SignUp</title>
+    <title>Sign Up</title>
+    <style>
+      /* Global styles */
+      body {
+        font-family: Arial, sans-serif;
+        background-color: #f0f0f0;
+        padding: 20px;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        height: 100vh;
+        margin: 0;
+      }
+
+      /* Form container styles */
+      .form-container {
+        background-color: #fff;
+        padding: 20px;
+        border-radius: 8px;
+        box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+        width: 300px;
+      }
+
+      /* Form element styles */
+      .form-container form {
+        display: flex;
+        flex-direction: column;
+      }
+      .form-container label {
+        font-weight: bold;
+        margin-bottom: 5px;
+      }
+      .form-container input[type="text"],
+      .form-container input[type="email"],
+      .form-container input[type="password"] {
+        width: calc(100% - 22px); /* Adjust for padding and border */
+        padding: 10px;
+        margin-bottom: 15px;
+        border: 1px solid #ccc;
+        border-radius: 5px;
+        font-size: 16px;
+      }
+      .form-container button[type="submit"] {
+        background-color: #4caf50;
+        color: white;
+        padding: 10px;
+        border: none;
+        border-radius: 5px;
+        cursor: pointer;
+        font-size: 16px;
+      }
+      .form-container button[type="submit"]:hover {
+        background-color: #45a049;
+      }
+      .form-container button.signin-btn {
+        background-color: #2196f3;
+        color: white;
+        padding: 10px;
+        border: none;
+        border-radius: 5px;
+        cursor: pointer;
+        font-size: 16px;
+        margin-top: 10px;
+        width: 100%;
+      }
+      .form-container button.signin-btn:hover {
+        background-color: #0b7dda;
+      }
+    </style>
   </head>
   <body>
-    <h2>Sign Up Form</h2>
-    <form action="/api/auth/register" method="POST">
-      <div>
-        <label for="username">Username:</label>
-        <input type="text" id="username" name="username" required />
-      </div>
-      <div>
-        <label for="email">Email:</label>
-        <input type="email" id="email" name="email" required />
-      </div>
-      <div>
-        <label for="password">Password:</label>
-        <input type="password" id="password" name="password" required />
-      </div>
-      <button type="submit">Sign Up</button>
-      <button><a href="/auth">SignIn</a>
-      </form></button>
+    <div class="form-container">
+      <h2>Sign Up Form</h2>
+      <form action="/api/auth/register" method="POST">
+        <div>
+          <label for="username">Username:</label>
+          <input type="text" id="username" name="username" required />
+        </div>
+        <div>
+          <label for="email">Email:</label>
+          <input type="email" id="email" name="email" required />
+        </div>
+        <div>
+          <label for="password">Password:</label>
+          <input type="password" id="password" name="password" required />
+        </div>
+        <button type="submit">Sign Up</button>
+      </form>
+      <button class="signin-btn" onclick="redirectToSignIn()">Sign In</button>
+    </div>
+
+    <script>
+      function redirectToSignIn() {
+        window.location.href = "/sign"; // Redirect to sign in page or route
+      }
+    </script>
   </body>
 </html>

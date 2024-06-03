@@ -4,7 +4,7 @@ const Car = require("../../models/Car");
 const { authAdmin, authJwt } = require("../../../middleware");
 //for testing purposes
 // GET /api/cars - Get all cars
-router.get("/", async (req, res) => {
+router.get("/all", async (req, res) => {
   try {
     const cars = await Car.find();
     res.json(cars);

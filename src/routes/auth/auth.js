@@ -22,15 +22,11 @@ router.post("/login", body("email").isEmail().withMessage("Invalid email format"
       return res.status(500).json({ message: "invalid credentials" });
     }
 
-    // generate token
-    const token = jwt.sign({ id: user._id, role: user.role }, process.env.JWT_SECRET);
+    const token = jwt.sign({ id: user._id, role: user.role }, process.env.JWT_SECRET); // generate token
 
-    // set token in cookie
-    res.cookie("jwt", token, { httpOnly: true });
-    res.redirect("/api/cars");
-    //res.json({ message: "user logged in successfully" });
-    //res.json({ message: "Login successful", redirectTo: "/api/cars", token: token });
-    //res.json({ token, redirect: "/api/cars" }); //used for jwt token(more secure and manage protecting routes)
+    res.cookie("jwt", token, { httpOnly: true }); // set token in cookie
+
+    res.redirect("/"); //going back to the home page after logging in
   } catch (error) {
     console.log("error logging in user : ", error);
     res.status(500).json({ message: "SERVER ERROR" });

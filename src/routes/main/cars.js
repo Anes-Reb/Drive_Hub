@@ -15,7 +15,7 @@ router.get("/", async (req, res) => {
 });
 
 // GET /api/cars/:id - Get details of a specific car by ID
-router.get("/:id", authJwt, async (req, res) => {
+router.get("/:id", async (req, res) => {
   try {
     // Extract the car ID from the request parameters
     const { id } = req.params;

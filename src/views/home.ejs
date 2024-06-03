@@ -1,0 +1,76 @@
+<!-- index.html -->
+
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Car Listing</title>
+    <style>
+      /* Add your CSS styles here */
+      body {
+        font-family: Arial, sans-serif;
+        padding: 20px;
+      }
+      h1 {
+        color: #333;
+      }
+      ul {
+        list-style-type: none;
+        padding: 0;
+      }
+      li {
+        margin-bottom: 10px;
+        background-color: #f0f0f0;
+        padding: 10px;
+        border-radius: 5px;
+      }
+      .button-container {
+        margin-top: 20px;
+      }
+      .signin-button {
+        background-color: #4caf50;
+        color: white;
+        padding: 10px 20px;
+        border: none;
+        border-radius: 5px;
+        cursor: pointer;
+        font-size: 16px;
+      }
+    </style>
+  </head>
+  <body>
+    <header>
+      <h1>DriveHub - Car Listing</h1>
+      <p>Welcome to DriveHub, your ultimate destination for exploring cars!</p>
+    </header>
+
+    <main>
+      <h2>Available Cars:</h2>
+      <ul id="car-list"></ul>
+    </main>
+
+    <div class="button-container">
+      <button class="signin-button" onclick="signIn()">Sign In</button>
+    </div>
+
+    <script>
+      function signIn() {
+        window.location.href = "/sign"; // Redirect to '/sign' route
+      }
+
+      // Fetch data from backend and render it
+      fetch("/api/cars/all")
+        .then((response) => response.json())
+        .then((data) => {
+          const carList = document.getElementById("car-list");
+          data.forEach((car) => {
+            const li = document.createElement("li");
+            li.textContent = `${car.make} ${car.model} (${car.year})`;
+            carList.appendChild(li);
+          });
+        })
+        .catch((error) => console.error("Error fetching data:", error));
+    </script>
+  </body>
+</html>

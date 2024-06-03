@@ -1,10 +1,10 @@
 const router = require("express").Router();
 const User = require("../../models/User");
-const { body, validationResult } = require("express-validator");
+const { validationResult, body } = require("express-validator");
 const jwt = require("jsonwebtoken");
 
 // POST /api/auth/login - User login
-router.post("/login", [body("email").isEmail(), body("password").notEmpty()], async (req, res) => {
+router.post("/login", body("email").isEmail().withMessage("Invalid email format"), body("password").exists().withMessage("Password is required"), async (req, res) => {
   //validation of form data
   const errors = validationResult(req);
   if (!errors.isEmpty()) {
@@ -22,15 +22,11 @@ router.post("/login", [body("email").isEmail(), body("password").notEmpty()], as
       return res.status(500).json({ message: "invalid credentials" });
     }
 
-    // generate token
-    const token = jwt.sign({ id: user._id, role: user.role }, process.env.JWT_SECRET);
+    const token = jwt.sign({ id: user._id, role: user.role }, process.env.JWT_SECRET); // generate token
 
-    // set token in cookie
-    res.cookie("jwt", token, { httpOnly: true });
-    res.redirect("/api/cars");
-    //res.json({ message: "user logged in successfully" });
-    //res.json({ message: "Login successful", redirectTo: "/api/cars", token: token });
-    //res.json({ token, redirect: "/api/cars" }); //used for jwt token(more secure and manage protecting routes)
+    res.cookie("jwt", token, { httpOnly: true }); // set token in cookie
+
+    res.redirect("/"); //going back to the home page after logging in
   } catch (error) {
     console.log("error logging in user : ", error);
     res.status(500).json({ message: "SERVER ERROR" });
@@ -38,7 +34,7 @@ router.post("/login", [body("email").isEmail(), body("password").notEmpty()], as
 });
 
 // POST /api/auth/register - User registration
-router.post("/register", [body("username").notEmpty(), body("email").isEmail(), body("password").isLength({ min: 6 })], async (req, res) => {
+router.post("/register", body("username").notEmpty().withMessage("Username is required"), body("email").isEmail().withMessage("Invalid email format"), body("password").isLength({ min: 6 }).withMessage("Password must be at least 6 characters long"), async (req, res) => {
   //validation of form data
   const errors = validationResult(req);
   if (!errors.isEmpty()) {
@@ -52,7 +48,7 @@ router.post("/register", [body("username").notEmpty(), body("email").isEmail(), 
     if (user) {
       return res.status(400).json({ message: "email address already in use" });
     }
-    user = new User({ username, email, password, role });
+    user = new User({ username, email, password });
     //waiting for user to be saved
     await user.save();
     //res.json({ message: "User registered successfully" });

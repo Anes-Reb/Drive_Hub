@@ -28,6 +28,7 @@ const carSchema = new Schema({
   },
   availability: {
     type: Boolean,
+    default: true,
     required: true,
   },
 });

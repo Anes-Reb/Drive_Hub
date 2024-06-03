@@ -30,6 +30,26 @@ router.get("/:id", authJwt, async (req, res) => {
   }
 });
 
+// POST /api/appointments - Create a new appointment
+router.post("/", authJwt, async (req, res) => {
+  const { date, time, userId, carId, status, additionalNotes } = req.body;
+  try {
+    const appointment = new Appointment({
+      date,
+      time,
+      userId,
+      carId,
+      status,
+      additionalNotes,
+    });
+    await appointment.save();
+    res.json({ message: "Appointment created successfully", appointment: appointment });
+  } catch (error) {
+    console.log("Error on creating appointment : ", error);
+    res.status(500).json({ message: "SERVER ERROR" });
+  }
+});
+
 // PUT /api/appointments/:id - Update details of a specific appointment by ID
 router.put("/:id", authJwt, authAdmin, async (req, res) => {
   const { status, additionalNotes } = req.body;

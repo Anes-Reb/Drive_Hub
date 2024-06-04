@@ -1,6 +1,6 @@
 const router = require("express").Router();
 
-router.get("/", (req, res) => {
+router.get("/signin", (req, res) => {
   res.render("signin");
 });
 

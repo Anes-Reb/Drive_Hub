@@ -41,23 +41,40 @@
   </head>
   <body>
     <header>
-      <h1>DriveHub</h1>
-      <p>Welcome to DriveHub, your ultimate destination for exploring cars!</p>
+      <h1>DriveHub - Car Listing</h1>
     </header>
+
+    <main>
+      <h2>Available Cars:</h2>
+      <ul id="car-list"></ul>
+    </main>
 
     <div class="button-container">
       <button class="signin-button" onclick="signIn()">Sign In</button>
-      <button class="signin-button" onclick="cars()">View Cars</button>
+      <button class="signin-button" onclick="home()">Home</button>
     </div>
 
     <script>
       function signIn() {
-        window.location.href = "/signin"; // Redirect to '/sign' route
+        window.location.href = "/sign"; // Redirect to '/sign' route
       }
 
-      function cars() {
-        window.location.href = "/cars"; // Redirect to '/cars' route
+      function home() {
+        window.location.href = "/"; // Redirect to '/' route
       }
+
+      // Fetch data from backend and render it
+      fetch("/api/cars/all")
+        .then((response) => response.json())
+        .then((data) => {
+          const carList = document.getElementById("car-list");
+          data.forEach((car) => {
+            const li = document.createElement("li");
+            li.textContent = `${car.make} ${car.model} (${car.year})`;
+            carList.appendChild(li);
+          });
+        })
+        .catch((error) => console.error("Error fetching data:", error));
     </script>
   </body>
 </html>

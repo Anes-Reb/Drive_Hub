@@ -26,7 +26,7 @@ router.post("/login", body("email").isEmail().withMessage("Invalid email format"
 
     res.cookie("jwt", token, { httpOnly: true }); // set token in cookie
 
-    res.redirect("/"); //going back to the home page after logging in
+    res.redirect("/cars"); //going back to the home page after logging in
   } catch (error) {
     console.log("error logging in user : ", error);
     res.status(500).json({ message: "SERVER ERROR" });
@@ -52,7 +52,7 @@ router.post("/register", body("username").notEmpty().withMessage("Username is re
     //waiting for user to be saved
     await user.save();
     //res.json({ message: "User registered successfully" });
-    res.redirect("/auth");
+    res.redirect("/signin");
   } catch (error) {
     console.log("Error on registration : ", error);
     res.status(500).json({ message: "SERVER ERROR" });

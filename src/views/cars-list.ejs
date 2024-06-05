@@ -56,7 +56,7 @@
 
     <script>
       function signIn() {
-        window.location.href = "/sign"; // Redirect to '/sign' route
+        window.location.href = "/signin"; // Redirect to '/sign' route
       }
 
       function home() {
@@ -64,17 +64,36 @@
       }
 
       // Fetch data from backend and render it
-      fetch("/api/cars/all")
-        .then((response) => response.json())
-        .then((data) => {
-          const carList = document.getElementById("car-list");
-          data.forEach((car) => {
-            const li = document.createElement("li");
-            li.textContent = `${car.make} ${car.model} (${car.year})`;
-            carList.appendChild(li);
-          });
-        })
-        .catch((error) => console.error("Error fetching data:", error));
+      document.addEventListener("DOMContentLoaded", function () {
+        fetch("/api/cars/all")
+          .then((response) => response.json())
+          .then((data) => {
+            const carList = document.getElementById("car-list");
+            // Loop through each car in the data and create a list item
+            data.forEach((car) => {
+              const li = document.createElement("li"); // Create a new list item
+              const link = document.createElement("a"); // Create a new link
+              link.textContent = `${car.make} ${car.model} (${car.year})`; // Set the link text to the car's make, model, and year
+              link.href = `javascript:void(0);`; // Set href temporarily to prevent default link behavior
+              link.style.textDecoration = "none"; // Remove underline from link
+              link.style.color = "#333"; // Set link color to black
+              li.appendChild(link); // Add the link to the list item
+              li.style.cursor = "pointer"; // Set cursor to pointer on hover
+              li.style.marginBottom = "10px"; // Add margin to the bottom of the list item
+              li.style.backgroundColor = "#f0f0f0"; // Set background color of the list item
+              li.style.padding = "10px"; // Add padding to the list item
+              li.style.borderRadius = "5px"; // Add border radius to the list item
+
+              // Add click event listener to handle navigation
+              li.addEventListener("click", () => {
+                window.location.href = `/api/cars/${car._id}`; // Redirect to '/api/cars/<id>'
+              });
+
+              carList.appendChild(li); // Add the list item to the car list
+            });
+          })
+          .catch((error) => console.error("Error fetching data:", error));
+      });
     </script>
   </body>
 </html>

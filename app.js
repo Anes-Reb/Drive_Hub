@@ -8,11 +8,10 @@ const { errorHandlingMiddleware } = require("./middleware");
 
 // Routes
 const authRoutes = require("./src/routes/auth/auth");
-const signRoutes = require("./src/routes/auth/sign");
 const carsRoutes = require("./src/routes/main/cars");
 const appointmentsRoutes = require("./src/routes/main/appointments");
 
-const mainRoute = require("./src/routes/main/render");
+const mainRoute = require("./src/routes/main/render", "./src/routes/auth/sign");
 
 // Set up EJS as the view engine
 app.set("views", path.join(__dirname, "./src/views"));
@@ -25,15 +24,14 @@ app.use(cookieParser()); // Parse cookies
 app.use(errorHandlingMiddleware); // Error handling middleware
 
 // Serve static files from the public directory
-app.use(express.static(path.join(__dirname, "public")));
+//app.use(express.static(path.join(__dirname, "public")));
 
 // api routes
 app.use("/api/auth", authRoutes);
 app.use("/api/cars", carsRoutes);
 app.use("/api/appointments", appointmentsRoutes);
 
-// ui routes
-app.use("/", signRoutes);
+// ui route
 app.use("/", mainRoute);
 
 app.listen(PORT, () => {

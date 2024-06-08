@@ -26,4 +26,16 @@ const authAdmin = (req, res, next) => {
   }
   next();
 };
-module.exports = { authAdmin, authJwt };
+
+const errorHandlingMiddleware = (err, req, res, next) => {
+  console.error(err.stack); // Log the error for internal debugging
+
+  // Determine the status code and message based on the error
+  const statusCode = err.status || 500;
+  const message = err.message || "Internal Server Error";
+
+  // Send the response with the appropriate status code and error message
+  res.status(statusCode).json({ error: message });
+};
+
+module.exports = { authAdmin, authJwt, errorHandlingMiddleware };

@@ -1,13 +1,11 @@
-const express = require("express");
-const router = express.Router();
+const router = require("express").Router();
 const Car = require("../../models/Car");
 const { authAdmin, authJwt } = require("../../../middleware");
-//for testing purposes
-// GET /api/cars - Get all cars
-router.get("/all", async (req, res) => {
+
+router.get("/", async (req, res) => {
   try {
     const cars = await Car.find();
-    res.json(cars);
+    res.render("cars-list", { cars: cars });
   } catch (error) {
     console.log("Error on getting cars : ", error);
     res.status(500).json({ message: "SERVER ERROR" });

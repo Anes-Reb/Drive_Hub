@@ -10,8 +10,7 @@ const { errorHandlingMiddleware } = require("./middleware");
 const authRoutes = require("./src/routes/auth/auth");
 const carsRoutes = require("./src/routes/main/cars");
 const appointmentsRoutes = require("./src/routes/main/appointments");
-
-const mainRoute = require("./src/routes/main/render", "./src/routes/auth/sign");
+const mainRoutes = require("./src/routes/main/home");
 
 // Set up EJS as the view engine
 app.set("views", path.join(__dirname, "./src/views"));
@@ -26,13 +25,11 @@ app.use(errorHandlingMiddleware); // Error handling middleware
 // Serve static files from the public directory
 //app.use(express.static(path.join(__dirname, "public")));
 
-// api routes
-app.use("/api/auth", authRoutes);
-app.use("/api/cars", carsRoutes);
+// routes
+app.use("/auth", authRoutes);
+app.use("/cars", carsRoutes);
 app.use("/api/appointments", appointmentsRoutes);
-
-// ui route
-app.use("/", mainRoute);
+app.use("/", mainRoutes);
 
 app.listen(PORT, () => {
   console.log(`Server is running on http://localhost:${PORT}`);

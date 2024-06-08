@@ -3,6 +3,14 @@ const User = require("../../models/User");
 const { validationResult, body } = require("express-validator");
 const jwt = require("jsonwebtoken");
 
+router.get("/signin", (req, res) => {
+  res.render("signin");
+});
+
+router.get("/signup", (req, res) => {
+  res.render("signup");
+});
+
 // POST /api/auth/login - User login
 router.post("/login", body("email").isEmail().withMessage("Invalid email format"), body("password").exists().withMessage("Password is required"), async (req, res) => {
   //validation of form data
@@ -22,11 +30,11 @@ router.post("/login", body("email").isEmail().withMessage("Invalid email format"
       return res.status(500).json({ message: "invalid credentials" });
     }
 
-    const token = jwt.sign({ id: user._id, role: user.role }, process.env.JWT_SECRET); // generate token
+    const token = jwt.sign({ id: user._id, role: user.role }, process.env.JWT_SECRET, { expiresIn: "5h" }); // generate token
 
     res.cookie("jwt", token, { httpOnly: true }); // set token in cookie
 
-    res.redirect("/cars"); //going back to the home page after logging in
+    res.redirect("/cars"); // redirect to cars page
   } catch (error) {
     console.log("error logging in user : ", error);
     res.status(500).json({ message: "SERVER ERROR" });
@@ -52,7 +60,7 @@ router.post("/register", body("username").notEmpty().withMessage("Username is re
     //waiting for user to be saved
     await user.save();
     //res.json({ message: "User registered successfully" });
-    res.redirect("/signin");
+    res.redirect("/auth/signin");
   } catch (error) {
     console.log("Error on registration : ", error);
     res.status(500).json({ message: "SERVER ERROR" });

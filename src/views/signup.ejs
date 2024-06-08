@@ -78,7 +78,7 @@
   <body>
     <div class="form-container">
       <h2>Sign Up Form</h2>
-      <form action="/api/auth/register" method="POST">
+      <form action="/auth/register" method="POST">
         <div>
           <label for="username">Username:</label>
           <input type="text" id="username" name="username" required />
@@ -98,7 +98,7 @@
 
     <script>
       function redirectToSignIn() {
-        window.location.href = "/signin"; // Redirect to sign in page or route
+        window.location.href = "/auth/signin"; // Redirect to sign in page or route
       }
     </script>
   </body>

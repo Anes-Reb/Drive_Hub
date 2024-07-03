@@ -5,25 +5,16 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Car Listing</title>
+    <title>Car</title>
     <style>
       /* Add your CSS styles here */
       body {
         font-family: Arial, sans-serif;
         padding: 20px;
       }
-      h1 {
+      h1,
+      h2 {
         color: #333;
-      }
-      ul {
-        list-style-type: none;
-        padding: 0;
-      }
-      li {
-        margin-bottom: 10px;
-        background-color: #f0f0f0;
-        padding: 10px;
-        border-radius: 5px;
       }
       .button-container {
         margin-top: 20px;
@@ -41,13 +32,17 @@
   </head>
   <body>
     <header>
-      <h1>DriveHub</h1>
-      <p>Welcome to DriveHub, your ultimate destination for exploring cars!</p>
+      <h1>DriveHub - Car</h1>
     </header>
+
+    <main>
+      <h2>Cars:</h2>
+      <h3><%= car.make %> <%= car.model %> (<%= car.year %>) <%= car.color %> <%= car.price %> <%= car.description %> <%= car.availability %></h1>
+    </main>
 
     <div class="button-container">
       <button class="signin-button" onclick="signIn()">Sign In</button>
-      <button class="signin-button" onclick="cars()">View Cars</button>
+      <button class="signin-button" onclick="home()">Home</button>
     </div>
 
     <script>
@@ -55,8 +50,8 @@
         window.location.href = "/auth/signin"; // Redirect to '/sign' route
       }
 
-      function cars() {
-        window.location.href = "/cars"; // Redirect to '/cars' route
+      function home() {
+        window.location.href = "/"; // Redirect to '/' route
       }
     </script>
   </body>

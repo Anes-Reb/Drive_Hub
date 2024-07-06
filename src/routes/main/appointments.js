@@ -1,6 +1,6 @@
 const express = require("express");
 const router = express.Router();
-const appointmentController = require("../../Controllers/appointmentsController");
+const appointmentController = require("../../controllers/appointmentsController");
 const { authJwt, authAdmin } = require("../../../middleware");
 
 // GET /api/appointments - Get all appointments
